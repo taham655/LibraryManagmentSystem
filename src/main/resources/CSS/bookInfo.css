@@ -1,0 +1,8 @@
+
+.ImageView{
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);
+ }
