@@ -45,6 +45,7 @@ public class bookInfoController extends Application {
         scene.getStylesheets().add(getClass().getResource("/CSS/bookInfo.css").toExternalForm());
         stage.setScene(scene);
         start(stage);
+        //stage.show();
 
     }
 
