@@ -8,7 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,17 +34,17 @@ public class Controller extends Application{
         leftNavBar.setPadding(new Insets(10));
         leftNavBar.setSpacing(10);
         leftNavBar.setAlignment(Pos.CENTER_LEFT);
-        leftNavBar.setStyle("-fx-background-color: #336699;");
+        leftNavBar.setStyle("-fx-background-color: #f3f1ea;");
         leftNavBar.getChildren().addAll(homeButton, aboutButton, contactButton);
 
         // Create a StackPane to hold the search bar in the center
         StackPane centerNavBar = new StackPane();
         centerNavBar.setPadding(new Insets(10));
-        centerNavBar.setStyle("-fx-background-color: #336699;");
+        centerNavBar.setStyle("-fx-background-color: #f3f1ea;");
         TextField searchField = new TextField();
         searchField.setPromptText("Search");
         Button searchButton = new Button("Search");
-        searchButton.setStyle("-fx-background-color: #000000;");
+        searchButton.setStyle("-fx-background-color: #654834;");
 
 
         FlowPane root = Utils.searchBooks("");
@@ -51,8 +55,15 @@ public class Controller extends Application{
         searchButton.setOnAction(e -> {
             String searchQuery = searchField.getText();
             scrollPane.setContent(Utils.searchBooks(searchQuery));
+
+
         });
 
+        searchField.setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.ENTER) {
+                        searchButton.fire();
+                    }
+                });
 
 
         centerNavBar.getChildren().add(searchField);
@@ -64,8 +75,8 @@ public class Controller extends Application{
         rightNavBar.setPadding(new Insets(10));
         rightNavBar.setSpacing(10);
         rightNavBar.setAlignment(Pos.CENTER_RIGHT);
-        rightNavBar.setStyle("-fx-background-color: #336699;");
-        logOut.setStyle("-fx-background-color: red;");
+        rightNavBar.setStyle("-fx-background-color: #f3f1ea;");
+        logOut.setStyle("-fx-background-color: maroon;");
         rightNavBar.getChildren().addAll(searchButton,logOut);
 
         // Create an HBox to hold the navigation buttons and search bar
@@ -73,7 +84,7 @@ public class Controller extends Application{
         navigationBar.getChildren().addAll(leftNavBar, centerNavBar, rightNavBar);
         HBox.setHgrow(centerNavBar, javafx.scene.layout.Priority.ALWAYS);
         navigationBar.setAlignment(Pos.CENTER);
-        navigationBar.setStyle("-fx-background-color: #000000;");
+        navigationBar.setStyle("-fx-background-color: #f3f1ea;");
 
 
 

@@ -11,7 +11,9 @@ public class Book {
     private Double num_pages;
     private String thumbnail;
 
-    public Book(int book_id, String bookTitle, String author, String categories, String description, int published_year, Double avg_rating, Double num_pages, String thumbnail) {
+    private String available;
+
+    public Book(int book_id, String bookTitle, String author, String categories, String description, int published_year, Double avg_rating, Double num_pages, String thumbnail, String available) {
         setBook_id(book_id);
         setAuthor(author);
         setBookTitle(bookTitle);
@@ -21,10 +23,19 @@ public class Book {
         setAvg_rating(avg_rating);
         setNum_pages(num_pages);
         setThumbnail(thumbnail);
+        setAvailable(available);
     }
 
     public Book() {
 
+    }
+
+    public String getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(String available) {
+        this.available = available;
     }
 
     public void setBook_id(int book_id) {

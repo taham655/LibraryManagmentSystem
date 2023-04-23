@@ -39,7 +39,7 @@ public class Utils {
         ExecutorService executor = Executors.newFixedThreadPool(15);
         int counter = 0;
         for (Book book : found) {
-            if (book.getBookTitle().toLowerCase().contains(name.toLowerCase()) && book.getThumbnail() != null) {
+            if (book.getBookTitle().toLowerCase().contains(name.toLowerCase()) && book.getThumbnail() != null && book.getDescription() != null) {
                     counter++;
                     if (counter > 50) break;
                     // Submit a new task to the executor
@@ -55,8 +55,8 @@ public class Utils {
                                     ImageView imageView = new ImageView(image);
                                     //new Image(image, 208,279, false, true));
                                     //imageView.setPreserveRatio(true);
-                                    imageView.setFitWidth(170);
-                                    imageView.setFitHeight(220);
+                                    imageView.setFitWidth(120);
+                                    imageView.setFitHeight(180);
                                     //240
                                     //360
                                     // Create Label with title
@@ -66,20 +66,22 @@ public class Utils {
                                     // Create VBox with ImageView and Label
                                     VBox box = new VBox(imageView, titleLabel);
                                     box.setAlignment(Pos.CENTER);
-                                    titleLabel.setStyle("-fx-text-fill: white;");
+
+                                    titleLabel.setStyle("-fx-text-fill: black; -fx-font-size: 11px; -fx-font-weight: bold; -fx-font-family:'Lucida Grande';");
+
 
                                     // Create button with ImageView as graphic
                                     Button button = new Button("", box);
-                                    button.setPrefSize(120, 180);
+                                    button.setPrefSize(120, 160);
                                     button.setOnAction(e -> {
                                         bookInfoController bookInfoController = new bookInfoController();
 
                                         // get the primary stage
                                         Stage primaryStage = new Stage();
 
-                                        // call the start method of BookInfoController with the primary stage
+                                       // call the start method of BookInfoController with the primary stage
                                         try {
-                                            bookInfoController.setStage(primaryStage,book.getBookTitle(), book.getAuthor(), book.getDescription(), image, book.getAvg_rating(),book.getCategories());
+                                            bookInfoController.setStage(primaryStage,book.getBook_id(),book.getBookTitle(), book.getAuthor(), book.getDescription(), image, book.getAvg_rating(),book.getCategories(), book.getAvailable());
                                         } catch (Exception ex) {
                                             throw new RuntimeException(ex);
                                         }

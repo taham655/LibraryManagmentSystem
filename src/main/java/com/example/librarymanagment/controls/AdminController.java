@@ -15,13 +15,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class AdminController implements Initializable{
 
-
+//#5d8dc7
+    //-fx-background-color: #806649;
+    //#d7d3cc
     @FXML
     private TableColumn<Book, String> ab_author_col;
 
@@ -75,19 +74,19 @@ public class AdminController implements Initializable{
 
         String data = "SELECT book_id, title, authors, categories, description, published_year, average_rating, num_pages,thumbnail FROM `Books`";
 
-        try {
-            PreparedStatement statement = connectDB.prepareStatement(data);
-            ResultSet rs = statement.executeQuery();
-
-            while (rs.next()) {
-                Book book = new Book(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getDouble(8),rs.getString(9));
-                bookList.add(book);
-            }
-            ab_table.setItems(bookList);
-            connectDB.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            PreparedStatement statement = connectDB.prepareStatement(data);
+//            ResultSet rs = statement.executeQuery();
+//
+//            while (rs.next()) {
+//                Book book = new Book(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getDouble(8),rs.getString(9));
+//                bookList.add(book);
+//            }
+//            ab_table.setItems(bookList);
+//            connectDB.close();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 
     }
 
