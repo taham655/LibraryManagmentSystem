@@ -9,17 +9,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class Controller extends Application{
-
-    @Override
 
         public void start(Stage primaryStage) throws IOException {
         BorderPane borderPane = new BorderPane();
@@ -44,7 +40,7 @@ public class Controller extends Application{
         TextField searchField = new TextField();
         searchField.setPromptText("Search");
         Button searchButton = new Button("Search");
-        searchButton.setStyle("-fx-background-color: #654834;");
+        searchButton.setStyle("-fx-background-color: #c4a054;");
 
 
         FlowPane root = Utils.searchBooks("");
@@ -65,10 +61,7 @@ public class Controller extends Application{
                     }
                 });
 
-
         centerNavBar.getChildren().add(searchField);
-
-
 
         //Create an HBox to hold the navigation buttons on the right
         HBox rightNavBar = new HBox();
@@ -76,7 +69,7 @@ public class Controller extends Application{
         rightNavBar.setSpacing(10);
         rightNavBar.setAlignment(Pos.CENTER_RIGHT);
         rightNavBar.setStyle("-fx-background-color: #f3f1ea;");
-        logOut.setStyle("-fx-background-color: maroon;");
+        logOut.setStyle("-fx-background-color: #3041c2;");
         rightNavBar.getChildren().addAll(searchButton,logOut);
 
         // Create an HBox to hold the navigation buttons and search bar
@@ -94,6 +87,7 @@ public class Controller extends Application{
 
         borderPane.setTop(navigationBar);
         borderPane.setCenter(scrollPane);
+        borderPane.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
 
         // Create scene and set it on the stage
         Scene scene = new Scene(borderPane, 1315, 890);
@@ -102,12 +96,14 @@ public class Controller extends Application{
         primaryStage.show();
 
         logOut.setOnAction(e ->{
+            login login = new login();
+            login.start(new Stage());
             primaryStage.close();
-
         });
 
 
     }
+
 
 
     public static void main(String[] args) {

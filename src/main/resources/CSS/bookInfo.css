@@ -1,8 +1,46 @@
+.titleLabel {
+    -fx-text-fill: black;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Arial Narrow';
+}
 
-.ImageView{
-    -fx-border-radius: 50%;
-    -fx-background-radius: 50%;
+.authorLabel {
+    -fx-text-fill: black;
+    -fx-font-size: 18px;
+    -fx-font-family: 'Arial Narrow';
+}
+
+.ratingLabel {
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-font-family: 'Arial Narrow';
+}
+
+.availableLabel {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Arial Narrow';
+}
+
+.availableLabel[available="yes"] {
+    -fx-text-fill: green;
+}
+
+.availableLabel[available="no"] {
+    -fx-text-fill: red;
+}
+
+.imageView {
+    -fx-border-width: 10px;
+    -fx-border-radius: 5px;
     -fx-border-color: black;
-    -fx-border-width: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);
- }
+    -fx-background-color: white;
+}
+
+.reviewButton {
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Arial Narrow';
+}

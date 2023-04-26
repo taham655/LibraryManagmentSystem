@@ -1,0 +1,34 @@
+/* Style the title label */
+.label.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Style the form labels */
+.label.form {
+    -fx-font-size: 16px;
+
+}
+
+/* Style the form text fields */
+.text-field.form {
+    -fx-font-size: 16px;
+    -fx-prompt-text-fill: #696969;
+    -fx-max-width: 300px;
+}
+
+/* Style the form password fields */
+.password-field.form {
+    -fx-font-size: 16px;
+    -fx-prompt-text-fill: gray;
+    -fx-min-width: 100px;
+}
+
+/* Style the sign-up button */
+.button.form {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-color: #000000;
+    -fx-text-fill: white;
+
+}

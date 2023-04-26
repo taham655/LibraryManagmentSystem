@@ -20,15 +20,9 @@ import java.util.concurrent.Executors;
 
 public class Utils {
 
-    private static List<Book> books = JDBC.getBooksData();
-//    public static void getData(){
-//            books = JDBC.getBooksData();
-//            System.out.println("iterate");
-//    }
-//
+
     public static FlowPane searchBooks(String name) {
-        List<Book> found = books;
-        //
+        List<Book> found = JDBC.getBooksData();
         FlowPane root = new FlowPane();
 
         root.setPadding(new Insets(10, 10, 10, 10));
@@ -67,7 +61,7 @@ public class Utils {
                                     VBox box = new VBox(imageView, titleLabel);
                                     box.setAlignment(Pos.CENTER);
 
-                                    titleLabel.setStyle("-fx-text-fill: black; -fx-font-size: 11px; -fx-font-weight: bold; -fx-font-family:'Lucida Grande';");
+                                    titleLabel.setStyle("-fx-text-fill: black; -fx-font-size: 12px;  -fx-font-family:'Verdana';");
 
 
                                     // Create button with ImageView as graphic
@@ -75,13 +69,11 @@ public class Utils {
                                     button.setPrefSize(120, 160);
                                     button.setOnAction(e -> {
                                         bookInfoController bookInfoController = new bookInfoController();
-
                                         // get the primary stage
                                         Stage primaryStage = new Stage();
-
                                        // call the start method of BookInfoController with the primary stage
                                         try {
-                                            bookInfoController.setStage(primaryStage,book.getBook_id(),book.getBookTitle(), book.getAuthor(), book.getDescription(), image, book.getAvg_rating(),book.getCategories(), book.getAvailable());
+                                            bookInfoController.setStage(primaryStage,book.getBook_id(),image);
                                         } catch (Exception ex) {
                                             throw new RuntimeException(ex);
                                         }
