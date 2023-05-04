@@ -1,9 +1,6 @@
 package com.example.librarymanagment.controls;
 
-import com.example.librarymanagment.model.Book;
-import com.example.librarymanagment.model.JDBC;
-import com.example.librarymanagment.model.Reviews;
-import com.example.librarymanagment.model.User;
+import com.example.librarymanagment.model.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class bookInfoController extends Application {
@@ -29,7 +27,9 @@ public class bookInfoController extends Application {
     static String usernames;
     static int user_id;
     public void setStage(Stage stage, int book_id,  Image image) throws Exception {
+
         Book getBook = JDBC.getUpdated(book_id);
+        System.out.println(getBook.getThumbnail());
         login login = new login();
         String username = login.getUserName();
         User user = JDBC.getUserData(username);
@@ -78,7 +78,7 @@ public class bookInfoController extends Application {
 
 
         Label descField = new Label(getBook.getDescription());
-        //descField.setPrefSize(600, 400);
+
         descField.setWrapText(true);
         descField.setText(getBook.getDescription());
 
@@ -90,6 +90,9 @@ public class bookInfoController extends Application {
         bookInfoBox.setSpacing(5);
         bookInfoBox.setAlignment(Pos.CENTER);
         bookInfoBox.setPadding(new Insets(20, 20, 20, 20));
+
+        borrowButton.setStyle("-fx-background-radius: 5; -fx-background-color: #342b2b; -fx-text-fill: #ffffff");
+        borrowButton.setMinWidth(150);
 
         borrowButton.setOnAction(e ->
         {
@@ -113,14 +116,37 @@ public class bookInfoController extends Application {
                 }
 
             };
+
+            Double debt = JDBC.getbalance(user_id);
+
+            List<borrow> borrowList = JDBC.getBorrowed(user_id);
             Button submitButton = new Button("Submit");
+            submitButton.setMinWidth(100);
+            submitButton.setStyle("-fx-background-color: #a38a7c");
             submitButton.setOnAction(event1 -> {
+                System.out.println("The debt is " + debt);
                 LocalDate currentDate = LocalDate.now();
                 d.setOnAction(event);
-                borrowBook(book_id, user_id, currentDate, d.getValue());
-                availableLabel.setText("Available : no");
-                availableLabel.setStyle("-fx-text-fill: red; -fx-font-size: 13px;-fx-font-weight: bold;-fx-font-family: 'Arial Narrow';");
-                submitButton.setDisable(true);
+                if (borrowList.size() >4 ){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("LIMIT EXCEEDED");
+                    alert.setContentText("Please return a book to borrow another one");
+                    alert.showAndWait();
+                    return;
+                } else if(debt > 0) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("BALANCE DUE");
+                    alert.setContentText("Please pay the balance to borrow another book");
+                    alert.showAndWait();
+                }else {
+                    borrowBook(book_id, user_id, currentDate, d.getValue());
+                    availableLabel.setText("Available : no");
+                    availableLabel.setStyle("-fx-text-fill: red; -fx-font-size: 13px;-fx-font-weight: bold;-fx-font-family: 'Arial Narrow';");
+                    submitButton.setDisable(true);
+                }
+
 
             });
 
@@ -140,6 +166,8 @@ public class bookInfoController extends Application {
         vbox.getChildren().addAll(bookInfoBox);
 
         Button reviewButton = new Button("Leave a Review !");
+        reviewButton.setStyle("-fx-background-radius: 5; -fx-background-color: #342b2b; -fx-text-fill: #ffffff");
+        reviewButton.setMinWidth(150);
         reviewButton.setId("reviewButton");
 
         reviewButton.setOnAction(e ->{
@@ -148,17 +176,33 @@ public class bookInfoController extends Application {
                 TextField reviewField = new TextField();
                 reviewField.setPromptText("Enter your review here");
                 Button submitButton = new Button("Submit");
+                submitButton.setStyle("-fx-background-radius: 10; -fx-background-color: #54463e; -fx-text-fill: #ffffff");
+                submitButton.setMinWidth(150);
 
                 // Set the action of the submit button
 
                     submitButton.setOnAction(event -> {
-
-                        JDBC.addReview(user.getUser_id(), book_id, 5, "'"+reviewField.getText() +"'"+ " - " + usernames, Timestamp.valueOf("2020-12-12 12:12:12"));
-                        reviewField.clear();
-                        submitButton.setDisable(true);
+                        if(JDBC.getbalance(user_id) > 0) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("BALANCE DUE");
+                            alert.setContentText("Please pay to leave a review");
+                            alert.showAndWait();
+                        } else {
+                            JDBC.addReview(user.getUser_id(), book_id, 5, "'" + reviewField.getText() + "'" + " - " + usernames, Timestamp.valueOf(LocalDateTime.now()));
+                            reviewField.clear();
+                            stage.close();
+                            Stage primaryStage = new Stage();
+                            try {
+                                setStage(primaryStage, book_id, image);
+                            } catch (Exception ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            submitButton.setDisable(true);
+                        }
                     });
 
-                    // Listen for the Enter key on the text field
+//                     Listen for the Enter key on the text field
                     reviewField.setOnKeyPressed(event -> {
                         if (event.getCode() == KeyCode.ENTER) {
                             submitButton.fire();
@@ -216,8 +260,11 @@ public class bookInfoController extends Application {
             reviewLabel.setText(r.getReview());
 
             reviewLabel.setStyle("-fx-text-fill: black; -fx-font-size: 13px;fx-font-family: 'Arial Narrow';");
-            reviewLabel.setAlignment(Pos.CENTER);
+            reviewLabel.setAlignment(Pos.CENTER_LEFT);
             reviewLabel.setPadding(new Insets(10, 0, 10, 0));
+            reviewLabel.setStyle("-fx-border-color: black; -fx-background-color: white;-fx-background-radius: 11px; -fx-tab-min-width: 100px ;-fx-border-radius: 5px; -fx-padding: 10px 10px 10px 10");
+            reviewLabel.setPrefWidth(1000);
+            reviews.setSpacing(5);
             reviews.getChildren().add(reviewLabel);
         }
 
@@ -243,6 +290,7 @@ public class bookInfoController extends Application {
     public static void getUserInfo(int id , String username){
         usernames = username;
         user_id = id;
+        System.out.println(user_id);
     }
 
     public void borrowBook(int book_id, int user_id, LocalDate borrowDate, LocalDate returnDate) {

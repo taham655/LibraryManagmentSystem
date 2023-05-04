@@ -6,16 +6,27 @@ public class User {
     private String username;
     private String password;
     private String phone;
-    private String address;
 
-    public User(int user_id, String name, String username, String password, String phone, String address) {
+    private Double outstanding_fines;
+
+    //private String address;
+    //private ArrayList<Book> borrowbooks = new ArrayList<Book>();
+
+    public User(int user_id, String name, String username, String password, String phone) {
         setUser_id(user_id);
         setName(name);
         setUsername(username);
         setPassword(password);
         setPhone(phone);
-        setAddress(address);
     }
+
+    public User(int id, String user, String pass) {
+    }
+
+
+
+
+    public User() {}
 
     public String getName() {
         return name;
@@ -32,20 +43,6 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public User(int id, String user, String pass) {
-    }
-
-    public User() {}
-
 
     public String getUsername() {
         return username;
@@ -69,5 +66,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Double getOutstanding_fines() {
+        return outstanding_fines;
+    }
+
+    public void setOutstanding_fines(Double outstanding_fines) {
+        this.outstanding_fines = outstanding_fines;
     }
 }

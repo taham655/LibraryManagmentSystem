@@ -21,16 +21,14 @@
 }
 
 .button {
-    -fx-background-color: #d7d3cc;
+    -fx-background-color: #c2b3a2;
     -fx-text-fill: black;
-    -fx-border-radius: 3px;
     -fx-padding: 5px 10px;
 
 }
 
 .button:hover {
-
-    -fx-text-fill: #f3f1ea;
+    -fx-text-fill: #e9e3dd;
     -fx-animation: shake 0.5s;
     -fx-scale-x: 1.08;
     -fx-scale-y: 1.08;

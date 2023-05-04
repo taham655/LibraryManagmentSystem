@@ -1,6 +1,6 @@
 .button {
-    -fx-background-color: #024bb0;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: #836848;
+    -fx-text-fill: black;
     -fx-border-radius: 3px;
     -fx-padding: 5px 10px;
     -fx-pref-width: 100px;
@@ -8,8 +8,8 @@
 }
 
 .button:hover {
-    -fx-background-color: #fcfcfc;
-    -fx-text-fill: #020202;
+    -fx-background-color: #3f2e21;
+    -fx-text-fill: #f3f1ea;
     -fx-animation: shake 0.5s;
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
@@ -21,3 +21,4 @@
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
+

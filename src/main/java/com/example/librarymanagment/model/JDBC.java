@@ -19,7 +19,7 @@ public class JDBC {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:8080/library", "root", "");
-            System.out.println("Data retieved");
+            //System.out.println("Connceted to database");
 
             return connection;
 
@@ -108,18 +108,20 @@ public class JDBC {
 
     //FOR USERS
 
-    public static void signUp(String username, String password, String confirmPassword) {
-        if (!password.equals(confirmPassword)) {
+    public static void signUp(String username, String password, String confirmPassword ,String name , String phone) {
+        if (!password.equals(confirmPassword) && !username.isEmpty() && !password.isEmpty() && !name.isEmpty() && !phone.isEmpty()) {
             throw new IllegalArgumentException("Password and confirm password do not match.");
         }
 
-        String insertQuery = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String insertQuery = "INSERT INTO users (username, password, name, phone) VALUES (?, ?, ?,?)";
 
         try {
             Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(insertQuery);
             statement.setString(1, username);
             statement.setString(2, password);
+            statement.setString(3, name);
+            statement.setString(4, phone);
             statement.executeUpdate();
 
             statement.close();
@@ -143,6 +145,23 @@ public class JDBC {
                     return -1; // login failed
                 }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void forgotPassword(String username, String password){
+        String updateQuery = "UPDATE users SET password = ? WHERE username = ?";
+
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(updateQuery);
+            statement.setString(1, password);
+            statement.setString(2, username);
+            statement.executeUpdate();
+
+            statement.close();
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -246,8 +265,288 @@ public class JDBC {
             throw new RuntimeException(e);
         }
     }
+
+//    public static ArrayList<Integer> getBorrowedUser(int user_id){
+//        String selectQuery = "SELECT book_id FROM `borrow` WHERE user_id = ?";
+//
+//
+//        try {
+//            Connection connection = getConnection();
+//            PreparedStatement statement = connection.prepareStatement(selectQuery);
+//            statement.setInt(1, user_id);
+//            ResultSet resultSet = statement.executeQuery();
+//            resultSet.next();
+//            ArrayList<Integer> requiredBook = new ArrayList<>();
+//            while (resultSet.next()) {
+//                int bookId = resultSet.getInt("book_id");
+//                requiredBook.add(bookId);
+//            }
+//
+//            resultSet.close();
+//            statement.close();
+//            connection.close();
+//
+//            return requiredBook;
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+    public static void addBook(String title, String authors, String categories, String description, double average_rating, String available, String thumbnail) {
+        //available = "yes";
+        String insertQuery = "INSERT INTO books (title, authors, categories, description, average_rating, available, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        //JDBC.addBook(bookName.getText(),author.getText(),genre.getText(),description.getText(),rating.getText(),"yes, bookURL.getText());
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(insertQuery);
+            statement.setString(1, title);
+            statement.setString(2, authors);
+            statement.setString(3, categories);
+            statement.setString(4, description);
+            statement.setDouble(5, average_rating);
+            statement.setString(6, available);
+            statement.setString(7, thumbnail);
+            statement.executeUpdate();
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void removebook(int book_id){
+        String deleteQuery = "DELETE FROM books WHERE book_id = ?";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(deleteQuery);
+            statement.setInt(1, book_id);
+            statement.executeUpdate();
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<borrow> getBorrowed(int user_id){
+        String selectQuery = "  SELECT b.borrowID, u.id, u.username, b.book_id, bk.title,DATEDIFF(b.expected_date, CURDATE()) AS days_left FROM borrow b JOIN users u ON b.user_id = u.id JOIN books bk ON b.book_id = bk.book_id WHERE u.id = ? ;";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(selectQuery);
+            statement.setInt(1, user_id);
+            ResultSet resultSet = statement.executeQuery();
+            List<borrow> borrowedBooks = new ArrayList<>();
+            while (resultSet.next()) {
+                int borrowID = resultSet.getInt("borrowID");
+                int userID = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                int bookID = resultSet.getInt("book_id");
+                String bookTitle = resultSet.getString("title");
+                int daysLeft = resultSet.getInt("days_left");
+                borrowedBooks.add(new borrow(borrowID, userID, username, bookID, bookTitle, daysLeft));
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+            return borrowedBooks;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public static void returnBook(int borrowID){
+        String deleteQuery = "DELETE FROM borrow WHERE borrowID = ?";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(deleteQuery);
+            statement.setInt(1, borrowID);
+            statement.executeUpdate();
+            System.out.println("Book returned");
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<borrow> totalBorrowed(){
+        String selectQuery = "  SELECT b.borrowID, u.id, u.username, b.book_id, bk.title,DATEDIFF(b.expected_date, CURDATE()) AS days_left , b.expected_date, b.borrow_date   FROM borrow b JOIN users u ON b.user_id = u.id JOIN books bk ON b.book_id = bk.book_id;";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(selectQuery);
+            ResultSet resultSet = statement.executeQuery();
+            List<borrow> borrowedBooks = new ArrayList<>();
+            while (resultSet.next()) {
+                int borrowID = resultSet.getInt("borrowID");
+                int userID = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                int bookID = resultSet.getInt("book_id");
+                String bookTitle = resultSet.getString("title");
+                int daysLeft = resultSet.getInt("days_left");
+                String borrowDate = String.valueOf(resultSet.getDate("borrow_date"));
+                String expectedDate = String.valueOf(resultSet.getDate("expected_date"));
+                borrowedBooks.add(new borrow(borrowID, userID, username, bookID, bookTitle, daysLeft, borrowDate, expectedDate));
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+            return borrowedBooks;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<User> getUserData(){
+        String selectQuery = "SELECT * FROM users";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(selectQuery);
+            ResultSet resultSet = statement.executeQuery();
+            List<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                String password = resultSet.getString("password");
+                String phone = resultSet.getString("phone");
+                String name = resultSet.getString("name");
+                users.add(new User(id,name, username, password, phone));
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+            return users;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void removeUser(int userID){
+        String deleteQuery = "DELETE FROM users WHERE id = ?";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(deleteQuery);
+            statement.setInt(1, userID);
+            statement.executeUpdate();
+            System.out.println("User removed");
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void createAdmin (String name, String username, String password, String phone){
+        String insertQuery = "INSERT INTO admin (username, password, phone) VALUES (?, ?, ?)";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(insertQuery);
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.setString(3, phone);
+            statement.executeUpdate();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //Admin Login
+
+    public static int adminLogin(String username, String password) {
+        String selectQuery = "SELECT Id FROM admin WHERE username = ? AND password = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("Id");
+                } else {
+                    return -1; // login failed
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean checkUser(String username){
+        String selectQuery = "SELECT * FROM users WHERE username = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+            statement.setString(1, username);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return true;
+                } else {
+                    return false; // login failed
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Double getbalance (int userID){
+        String selectQuery = "SELECT outstanding_balance FROM users WHERE id = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+            statement.setInt(1, userID);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getDouble("outstanding_balance");
+                } else {
+                    return null; // login failed
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateBalance (int userID, double balance){
+        String updateQuery = "UPDATE users SET outstanding_balance = ? WHERE id = ?";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(updateQuery);
+            statement.setDouble(1, balance);
+            statement.setInt(2, userID);
+            statement.executeUpdate();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void payBalance(int userID) {
+        String updateQuery = "UPDATE users SET outstanding_balance = 0 WHERE id = ?";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(updateQuery);
+            statement.setInt(1, userID);
+            statement.executeUpdate();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
-
-
-
-
