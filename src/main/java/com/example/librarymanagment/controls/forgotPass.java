@@ -2,15 +2,14 @@ package com.example.librarymanagment.controls;
 
 import com.example.librarymanagment.model.JDBC;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -23,44 +22,50 @@ public class forgotPass extends Application {
         Label errorLabel = new Label();
 
         Label titleLabel = new Label("Forgot Password");
+        titleLabel.setStyle("-fx-font-size: 50px; -fx-font-weight: bold; -fx-font-family: Poppins Light; -fx-text-fill: #000000;");
+        titleLabel.setAlignment(Pos.CENTER);
+        titleLabel.setPadding(new Insets(0, 0, 50, 0));
 
         Label usernameLabel = new Label("Username");
+        usernameLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: Poppins; -fx-text-fill: #000000;");
+        usernameLabel.setAlignment(Pos.CENTER_LEFT);
         TextField usernameTextField = new TextField();
+        usernameTextField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
         usernameTextField.setPrefHeight(30);
-        usernameTextField.setMaxWidth(200);
+        usernameTextField.setMaxWidth(350);
         usernameTextField.setPromptText("Enter your username"); // add prompt text
 
         Label passwordLabel = new Label("Password");
+        passwordLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: Poppins; -fx-text-fill: #000000;");
         PasswordField passwordField = new PasswordField();
+        passwordField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
         passwordField.setPrefHeight(30);
-        passwordField.setMaxWidth(200);
+        passwordField.setMaxWidth(350);
         passwordField.setPromptText("Enter your password"); // add prompt text
 
         Label confirmPasswordLabel = new Label("Confirm Password");
+        confirmPasswordLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: Poppins; -fx-text-fill: #000000;");
         PasswordField confirmPasswordField = new PasswordField();
+        confirmPasswordField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
         confirmPasswordField.setPrefHeight(30);
-        confirmPasswordField.setMaxWidth(200);
+        confirmPasswordField.setMaxWidth(350);
         confirmPasswordField.setPromptText("Confirm your password"); // add prompt text
 
-        VBox vbox1 = new VBox(25);
-        vbox1.getChildren().addAll(usernameLabel, passwordLabel, confirmPasswordLabel);
-        vbox1.setAlignment(Pos.CENTER_RIGHT);
-
-        VBox vbox2 = new VBox(8);
-        vbox2.getChildren().addAll(usernameTextField, passwordField, confirmPasswordField);
-
-        HBox hbox = new HBox(10);
-
-        hbox.getChildren().addAll(vbox1, vbox2);
-        hbox.setAlignment(Pos.CENTER);
 
 
+        VBox vbox = new VBox(8);
+        vbox.getChildren().addAll(titleLabel, usernameLabel, usernameTextField, passwordLabel, passwordField, confirmPasswordLabel, confirmPasswordField, errorLabel);
 
+        //HBox hbox = new HBox(10);
 
-
-
+        //hbox.getChildren().addAll(vbox1, vbox2);
+        vbox.setAlignment(Pos.CENTER_LEFT);
 
         Button submitButton = new Button("Submit");
+        submitButton.setMinWidth(200);
+        submitButton.setMaxHeight(40);
+
+
 
         submitButton.setOnAction(e ->{
             if(!JDBC.checkUser(usernameTextField.getText())){
@@ -77,26 +82,34 @@ public class forgotPass extends Application {
             }
         });
 
-        Button nvm = new Button("nvm sorry");
+        Button nvm = new Button("Go Back");
         //aldMemberButton.setDefaultButton(true);
-        nvm.setStyle("-fx-background-color: TRANSPARENT; -fx-text-fill: #1531bb; -fx-font-style: italic; -fx-underline: true;");
+        nvm.setStyle("-fx-background-color: TRANSPARENT; -fx-text-fill: #000000; -fx-font-style: italic; -fx-underline: true; -fx-border-color: TRANSPARENT; -fx-font-size: 12px; -fx-font-weight: bold; -fx-font-family: Poppins;");
         nvm.setOnAction(e -> {
             login login = new login();
             login.start(primaryStage);
         });
         HBox buttonBox = new HBox();
         buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.getChildren().addAll(submitButton, nvm);
+        buttonBox.getChildren().addAll(submitButton);
 
 
 
         VBox vBox = new VBox(10);
-        vBox.getChildren().addAll(titleLabel, hbox, errorLabel, buttonBox);
+        vBox.getChildren().addAll(titleLabel, vbox, errorLabel, buttonBox, nvm);
         vBox.setAlignment(Pos.CENTER);
-        borderPane.setCenter(vBox);
+
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(vBox);
+        hBox.setAlignment(Pos.CENTER);
 
 
-        Scene scene = new Scene(borderPane, 500, 500);
+        borderPane.setCenter(hBox);
+
+        borderPane.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+
+
+        Scene scene = new Scene(borderPane, 1315, 890);
         scene.getStylesheets().add(getClass().getResource("/CSS/signup.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();

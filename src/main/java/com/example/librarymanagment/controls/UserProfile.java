@@ -34,9 +34,9 @@ public class UserProfile extends Application {
         BorderPane layout = new BorderPane();
 
 
-        Image logo = new Image("/images/logo1.png");
+        Image logo = new Image("/images/logowhite.png");
         ImageView logoView = new ImageView(logo);
-        logoView.setFitHeight(30);
+        logoView.setFitHeight(20);
         logoView.setFitWidth(60);
 
 
@@ -74,7 +74,7 @@ public class UserProfile extends Application {
         goBackBox.setPadding(new Insets(10));
         navBar.getChildren().addAll(goBackBox, LogoutBox);
 
-        navBar.setStyle("-fx-background-color: #a38a7c;-fx-effect: dropshadow(gaussian, rgba(70,68,68,0.3), 8, 0.4, 0, 0.1)");
+        navBar.setStyle("-fx-background-color: #000000;-fx-effect: dropshadow(gaussian, rgba(70,68,68,0.3), 8, 0.4, 0, 0.1)");
 
 
         layout.setTop(navBar);
@@ -186,7 +186,7 @@ public class UserProfile extends Application {
                 // Create a layout pane for book information
                 HBox bookInfoBox = new HBox();
                 bookInfoBox.setPadding(new Insets(10));
-                bookInfoBox.setStyle("-fx-background-color: #503d31; -fx-border-color: #000000; -fx-border-width: 1px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.4, 0, 1);");
+                bookInfoBox.setStyle("-fx-background-color: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.4, 0, 1);");
                 bookInfoBox.setPrefWidth(1500);
                 bookInfoBox.setPrefHeight(30);
                 bookInfoBox.setAlignment(Pos.CENTER);

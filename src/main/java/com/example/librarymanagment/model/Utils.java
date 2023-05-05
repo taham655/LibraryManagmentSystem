@@ -62,7 +62,7 @@ public class Utils {
                                     // Create VBox with ImageView and Label
                                     VBox box = new VBox(imageView, titleLabel);
                                     box.setAlignment(Pos.CENTER);
-                                    titleLabel.setStyle("-fx-text-fill: black; -fx-font-size: 14px; -fx-font-family:'Arial Narrow'; -fx-font-weight: bold;");
+                                    titleLabel.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 14px; -fx-font-family:'Arial Narrow'; -fx-font-weight: bold;");
 
                                     // Create button with VBox as graphic
                                     Button button = new Button("", box);

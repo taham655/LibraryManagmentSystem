@@ -4,11 +4,14 @@ import com.example.librarymanagment.model.JDBC;
 import com.example.librarymanagment.model.User;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,28 +33,39 @@ public class login extends Application {
 
         // Add a title label
         Label titleLabel = new Label("Login");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        titleLabel.setStyle("-fx-font-size: 50px; -fx-font-weight: bold; -fx-font-family: Poppins Light; -fx-text-fill: #000000;");
+
+        Image logo = new Image("/images/blacklogo.png");
+        ImageView logoImageView = new ImageView(logo);
+        logoImageView.setFitHeight(100);
+        logoImageView.setPreserveRatio(true);
+//        logoImageView.setFitWidth(50);
 
 
         // Add a username label and text field
-        Label usernameLabel = new Label("Username:");
+        Label usernameLabel = new Label("USERNAME");
+        usernameLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: Poppins; -fx-text-fill: #000000;");
 
         TextField usernameTextField = new TextField();
+        usernameTextField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
         usernameTextField.setText("taha");
-        usernameTextField.setPrefHeight(30);
+        usernameTextField.setMinWidth(350);
+        //usernameTextField.setPrefHeight(30);
 
 
         // Add a password label and password field
-        Label passwordLabel = new Label("Password:");
+        Label passwordLabel = new Label("PASSWORD");
+        passwordLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Roboto Light'; -fx-text-fill: #000000;");
 
         PasswordField passwordField = new PasswordField();
+        passwordField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 1px; -fx-border-insets: 1px; -fx-min-height: 50px;");
         passwordField.setText("asd123");
         passwordField.setPrefHeight(30);
 
 
         ComboBox<String> comboBox = new ComboBox<>(FXCollections.observableArrayList( "User" , "Admin"));
         comboBox.getSelectionModel().selectFirst();
-        comboBox.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2d0e0e;");
+        comboBox.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2d0e0e; -fx-border-color: #000000; -fx-border-width: 1px;");
         final String[] selectedValue = {comboBox.getValue()};
 
         comboBox.setOnAction(e -> {
@@ -63,7 +77,9 @@ public class login extends Application {
         Button loginButton = new Button("Login");
         loginButton.setMinWidth(100);
         Button forgotPasswordButton = new Button("Forgot Password?");
-        forgotPasswordButton.setStyle("-fx-background-color: TRANSPARENT; -fx-text-fill: #1531bb; -fx-pref-width: 150; -fx-font-style: italic; -fx-underline: true;");
+        forgotPasswordButton.setStyle("-fx-background-color: TRANSPARENT; -fx-text-fill: #000000; -fx-pref-width: 120; -fx-font-style: italic; -fx-underline: true;-fx-border-color: TRANSPARENT; ");
+        forgotPasswordButton.setPadding(new Insets(0, 0, 0, 0));
+        forgotPasswordButton.setMaxHeight(30);
         forgotPasswordButton.setOnAction(e -> {
             forgotPass forgotPassword = new forgotPass();
             try {
@@ -76,7 +92,13 @@ public class login extends Application {
 
         HBox loginBox = new HBox();
         loginBox.setSpacing(110);
-        loginBox.getChildren().addAll(loginButton, forgotPasswordButton);
+        loginBox.setPadding(new javafx.geometry.Insets(20));
+        loginBox.setAlignment(Pos.CENTER);
+        loginBox.getChildren().addAll(loginButton);
+
+        Label registerLabel = new Label("");
+        registerLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Roboto Light'; -fx-text-fill: #ff0000;");
+        registerLabel.setAlignment(Pos.CENTER);
 
         loginButton.setOnAction(e -> {
             System.out.println(selectedValue[0]);
@@ -91,6 +113,7 @@ public class login extends Application {
                     }
                     primaryStage.close();
                 } else {
+                    registerLabel.setText("Username or password is incorrect");
                     System.out.println("Login failed");
                 }
             }
@@ -109,34 +132,64 @@ public class login extends Application {
                     }
                     primaryStage.close();
                 } else {
-                    System.out.println("Login failed");
+                    registerLabel.setText("Username or password is incorrect");
                 }
             }
 
         });
-        Button signUpButton = new Button("Sign Up");
+        HBox hbox1 = new HBox();
+        Button signUpButton = new Button("Not Registred? Sign Up");
+        signUpButton.setStyle("-fx-background-color: TRANSPARENT; -fx-text-fill: #000000; -fx-pref-width: 150; -fx-font-style: italic; -fx-underline: true; -fx-border-color: TRANSPARENT;");
+        signUpButton.setMaxHeight(20);
+
+        //signUpButton.setAlignment(Pos.CENTER);
+        hbox1.setAlignment(Pos.CENTER);
+        hbox1.getChildren().addAll(signUpButton);
         signUpButton.setOnAction(e -> {
             signup signup = new signup();
             signup.start(new Stage());
             primaryStage.close();
         });
 
-        vbox.getChildren().addAll(comboBox,titleLabel, usernameLabel, usernameTextField, passwordLabel, passwordField, loginBox, signUpButton);
-        HBox.setHgrow(vbox, Priority.ALWAYS);
+        VBox vBox = new VBox(logoImageView);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPadding(new javafx.geometry.Insets(0, 0, 50, 0));
+
+        HBox hbox2 = new HBox();
+        hbox2.setAlignment(Pos.CENTER);
+        hbox2.getChildren().addAll(registerLabel);
+
+
+        vbox.getChildren().addAll( vBox, comboBox, usernameLabel, usernameTextField, passwordLabel, passwordField,forgotPasswordButton,hbox2, loginBox,hbox1);
+        //HBox.setHgrow(vbox, Priority.ALWAYS);
+        hbox.setAlignment(Pos.CENTER);
         hbox.getChildren().addAll(vbox);
         hbox.setPrefWidth(350);
 
-        borderPane.setRight(hbox);
 
-        Image backgroundImage = new Image("/images/bg2.png");
 
-        // Create the background image
-        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
+       // borderPane.setTop(vBox);
+        borderPane.setCenter(hbox);
 
-        // Set the background image to the root pane
-        borderPane.setBackground(new Background(background));
+        borderPane.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 255), CornerRadii.EMPTY, Insets.EMPTY)));
+
+
+//        Image image = new Image("/images/bg22.png");
+//
+//        // Create the background image
+//        BackgroundImage backgroundImage = new BackgroundImage(
+//                image,
+//                BackgroundRepeat.NO_REPEAT,
+//                BackgroundRepeat.NO_REPEAT,
+//                BackgroundPosition.DEFAULT,
+//                BackgroundSize.DEFAULT
+//        );
+//
+//        // Create the background
+//        Background background = new Background(backgroundImage);
+//
+//        // Set the background to the root layout
+//        borderPane.setBackground(background);
 
 
         // Create a Scene and show the Stage

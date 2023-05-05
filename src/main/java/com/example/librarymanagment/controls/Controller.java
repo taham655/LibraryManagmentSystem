@@ -11,8 +11,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class Controller extends Application{
                 BorderPane borderPane = new BorderPane();
 
 
-                Image profileImage = new Image("/images/avatar.png");
+                Image profileImage = new Image("/images/avatar1.png");
                 ImageView profileImageView = new ImageView(profileImage);
                 profileImageView.setFitHeight(20);
                 profileImageView.setFitWidth(20);
@@ -55,15 +57,15 @@ public class Controller extends Application{
 
                 // Create an HBox to hold the navigation buttons on the left
 
-                Image logo = new Image("/images/logo1.png");
+                Image logo = new Image("/images/logowhite.png");
                 ImageView logoView = new ImageView(logo);
-                logoView.setFitHeight(30);
+                logoView.setFitHeight(20);
                 logoView.setFitWidth(60);
                 HBox leftNavBar = new HBox();
                 leftNavBar.setPadding(new Insets(10));
                 leftNavBar.setSpacing(10);
                 leftNavBar.setAlignment(Pos.CENTER_LEFT);
-                leftNavBar.setStyle("-fx-background-color: #a38a7c;");
+                leftNavBar.setStyle("-fx-background-color: #000000;");
                 Button HomeButton = new Button("", logoView);
                 HomeButton.setStyle("-fx-background-color: TRANSPARENT;-fx-effect: dropshadow(gaussian, rgba(0,0,0,0), 0, 0, 0, 0);");
                 leftNavBar.getChildren().addAll(HomeButton,ProfileButton);
@@ -71,12 +73,12 @@ public class Controller extends Application{
                 // Create a StackPane to hold the search bar in the center
                 StackPane centerNavBar = new StackPane();
                 centerNavBar.setPadding(new Insets(10));
-                centerNavBar.setStyle("-fx-background-color: #a38a7c;");
+                centerNavBar.setStyle("-fx-background-color: #000000;");
                 TextField searchField = new TextField();
                 searchField.setPromptText("Search book title...");
 
 
-                Image searchImage = new Image("/images/search1.png");
+                Image searchImage = new Image("/images/search2.png");
                 ImageView searchImageView = new ImageView(searchImage);
                 searchImageView.setFitHeight(22);
                 searchImageView.setFitWidth(22);
@@ -108,7 +110,7 @@ public class Controller extends Application{
                 rightNavBar.setPadding(new Insets(10));
                 rightNavBar.setSpacing(10);
                 rightNavBar.setAlignment(Pos.CENTER_RIGHT);
-                rightNavBar.setStyle("-fx-background-color: #a38a7c;");
+                rightNavBar.setStyle("-fx-background-color: #000000;");
 
                 rightNavBar.getChildren().addAll(searchButton,logOut);
 
@@ -117,7 +119,7 @@ public class Controller extends Application{
                 navigationBar.getChildren().addAll(leftNavBar, centerNavBar, rightNavBar);
                 HBox.setHgrow(centerNavBar, javafx.scene.layout.Priority.ALWAYS);
                 navigationBar.setAlignment(Pos.CENTER);
-                navigationBar.setStyle("-fx-background-color: #1e1e1e;");
+                navigationBar.setStyle("-fx-background-color: #000000;");
 
 
                 scrollPane.setContent(root);
@@ -131,7 +133,6 @@ public class Controller extends Application{
 
                 scrollPane.setFitToHeight(true);
                 scrollPane.setFitToWidth(true);
-                scrollPane.setBackground(new Background(new BackgroundFill(Color.rgb(232, 211, 177), CornerRadii.EMPTY, Insets.EMPTY)));
                 borderPane.setTop(navigationBar);
                 borderPane.setCenter(scrollPane);
 

@@ -26,8 +26,9 @@ public class signup extends Application {
 
                 // Create UI elements
                 Label titleLabel = new Label("Sign Up");
+                titleLabel.setStyle("-fx-font-size: 200px;-fx-font-family: Poppins; -fx-text-fill: #000000;");
                 titleLabel.setAlignment(Pos.CENTER);
-                titleLabel.getStyleClass().add("title"); // add the "title" style class
+                //titleLabel.getStyleClass().add("title"); // add the "title" style class
 
                 Label errorLabel = new Label();
                 errorLabel.setPadding(new Insets(0, 0, 10, 0));
@@ -36,12 +37,16 @@ public class signup extends Application {
 
                 TextField usernameTextField = new TextField();
                 usernameTextField.setPromptText("Enter your username"); // add prompt text
+                usernameTextField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
                 Label usernameLabel = new Label("Username:");
+                usernameTextField.setMinWidth(350);
                 //usernameLabel.setPadding(new Insets(0, 10, 0, 0));
 
 
 
                 TextField nameTextField = new TextField();
+                nameTextField.setPromptText("Enter your name"); // add prompt text
+                nameTextField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
                 Label nameLabel = new Label("Name:");
                 //nameLabel.setPadding(new Insets(0, 57, 0, 0));
                 nameTextField.setPromptText("Enter your name");
@@ -50,29 +55,31 @@ public class signup extends Application {
 
                 TextField phoneTextField = new TextField();
                 Label phoneLabel = new Label("Phone:");
+                phoneTextField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
 
                 phoneTextField.setPromptText("Enter your phone number");
 
 
                 PasswordField passwordField = new PasswordField();
                 passwordField.setPromptText("Enter your password"); // add prompt text
+                passwordField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
                 Label passwordLabel = new Label("Password:");
 
 
                 PasswordField confirmPasswordField = new PasswordField();
                 confirmPasswordField.setPromptText("Confirm password"); // add prompt text
+                confirmPasswordField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
                 Label confirmPasswordLabel = new Label("Confirm Password:");
-
-
 
 
 
                 Button signUpButton = new Button("Sign Up");
                 signUpButton.setDefaultButton(true);
 
-                Button aldMemberButton = new Button("Already a member?");
+                Button aldMemberButton = new Button("Already Registered? Login");
                 //aldMemberButton.setDefaultButton(true);
-                aldMemberButton.setStyle("-fx-background-color: TRANSPARENT; -fx-text-fill: #1531bb; -fx-pref-width: 150; -fx-font-style: italic; -fx-underline: true;");
+                aldMemberButton.setStyle("-fx-background-color: TRANSPARENT; -fx-text-fill: #000000; -fx-pref-width: 150; -fx-font-style: italic; -fx-underline: true; -fx-border-color: TRANSPARENT;");
+                aldMemberButton.setMinWidth(250);
                 aldMemberButton.setOnAction(e -> {
 
                         login login = new login();
@@ -81,7 +88,7 @@ public class signup extends Application {
 
                 HBox buttonBox = new HBox();
                 buttonBox.setAlignment(Pos.CENTER);
-                buttonBox.getChildren().addAll(signUpButton, aldMemberButton);
+                buttonBox.getChildren().add(signUpButton);
 
 
 
@@ -102,6 +109,9 @@ public class signup extends Application {
                         } else if (!phoneTextField.getText().matches("[0-9]+")) {
                                 errorLabel.setText("Phone number should be numeric");
                                 errorLabel.setTextFill(Color.RED);
+                        } else if (JDBC.checkUser(usernameTextField.getText())){
+                                errorLabel.setText("Username already exists");
+                                errorLabel.setTextFill(Color.RED);
                         }
                         else {
                                 JDBC.signUp(usernameTextField.getText(), passwordField.getText(), confirmPasswordField.getText(), nameTextField.getText(), phoneTextField.getText());
@@ -109,36 +119,33 @@ public class signup extends Application {
                                 login.start(primaryStage);
                         }
                 });
-                VBox v1 = new VBox();
-                v1.setSpacing(20);
-                v1.setAlignment(Pos.CENTER_RIGHT);
-                v1.getChildren().addAll( nameLabel,usernameLabel, passwordLabel, confirmPasswordLabel, phoneLabel);
+
 
 
                 VBox v2 = new VBox();
                 v2.setSpacing(10);
-                v2.getChildren().addAll(nameTextField, usernameTextField, passwordField, confirmPasswordField,  phoneTextField);
+                v2.getChildren().addAll(usernameLabel, usernameTextField, passwordLabel, passwordField, confirmPasswordLabel, confirmPasswordField, nameLabel, nameTextField, phoneLabel, phoneTextField);
 
                 // Create VBox to hold form elements
                 HBox formBox = new HBox(10);
                 formBox.setAlignment(Pos.CENTER);
                 formBox.setPadding(new Insets(10));
-                formBox.getChildren().addAll(v1, v2);
+                formBox.getChildren().addAll(v2);
 
                 VBox main = new VBox();
                 main.setAlignment(Pos.CENTER);
                 main.setPadding(new Insets(10));
 
-                titleLabel.setPadding(new Insets(10, 0, 30, 0));
+                titleLabel.setPadding(new Insets(10, 0, 50, 0));
                 titleLabel.setStyle("-fx-font-size: 30; -fx-font-weight: bold;");
-                main.getChildren().addAll(titleLabel, formBox, errorLabel, buttonBox);
+                main.getChildren().addAll(titleLabel,aldMemberButton,  formBox, errorLabel, buttonBox);
 
                 BorderPane borderPane = new BorderPane(main);
                 //borderPane.setTop(titleLabel);
-                borderPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
+                borderPane.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
 
                 // Load the CSS file and apply it to the scene
-                Scene scene = new Scene(borderPane, 500, 400);
+                Scene scene = new Scene(borderPane, 1315, 890);
                 scene.getStylesheets().add(getClass().getResource("/CSS/signup.css").toExternalForm());
 
                 // Show the scene

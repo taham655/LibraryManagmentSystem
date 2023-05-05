@@ -33,7 +33,7 @@ public class adminController extends Application {
             navBar.setPadding(new Insets(50, 10, 50, 10));
             navBar.setSpacing(20);
             navBar.setPrefWidth(230);
-            navBar.setStyle("-fx-background-color: #261717;");
+            navBar.setStyle("-fx-background-color: #1f1f1f;");
 
 
             // Create an ImageView for admin avatar
@@ -87,6 +87,7 @@ public class adminController extends Application {
             // Create the TableView for adding books
             Book book = new Book();
             TextField bookURL = new TextField();
+            bookURL.setPrefWidth(300);
             TextField bookName = new TextField();
             TextField author = new TextField();
             TextField genre = new TextField();
@@ -97,18 +98,31 @@ public class adminController extends Application {
             bookImageView.setFitHeight(220);
             bookImageView.setFitWidth(180);
             bookImageView.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+            Label bookAddedLabel = new Label("");
 
                 Button ADD = new Button("ADD BOOK");
 
                 ADD.setOnAction(e -> {
-                    JDBC.addBook(bookName.getText(),author.getText(),genre.getText(),description.getText(), Double.parseDouble(rating.getText()),"yes", bookURL.getText());
+                    if (bookURL.getText().isEmpty() || bookName.getText().isEmpty() || author.getText().isEmpty() || genre.getText().isEmpty() || rating.getText().isEmpty() || description.getText().isEmpty()){
+                        bookAddedLabel.setTextFill(Color.RED);
+                        bookAddedLabel.setText("Please fill all the fields!");
+                    } else if(Double.parseDouble(rating.getText())  > 5 || (Double.parseDouble(rating.getText()) < 0) || !rating.getText().matches("[0-9]+(\\.[0-9]+)?")){
+                        bookAddedLabel.setTextFill(Color.RED);
+                        bookAddedLabel.setText("Please enter a valid rating!");
+                    } else {
+                        JDBC.addBook(bookName.getText(),author.getText(),genre.getText(),description.getText(), Double.parseDouble(rating.getText()),"yes", bookURL.getText());
+                        bookAddedLabel.setTextFill(Color.GREEN);
+                        bookAddedLabel.setText("Book Added Successfully!");
+
+                    }
+                   // JDBC.addBook(bookName.getText(),author.getText(),genre.getText(),description.getText(), Double.parseDouble(rating.getText()),"yes", bookURL.getText());
                 });
 
         // Create the necessary containers
         VBox mainContainer = new VBox();
         mainContainer.setAlignment(Pos.CENTER);
 
-        HBox topContainer = new HBox();
+        VBox topContainer = new VBox();
         topContainer.setAlignment(Pos.CENTER);
 
         HBox middleContainer = new HBox();
@@ -139,11 +153,14 @@ public class adminController extends Application {
 
             // Create the search button
         Button searchButton = new Button("Search");
+
         searchButton.setOnAction(e -> {
             Image bookImage = new Image(bookURL.getText());
             bookImageView.setImage(bookImage);
         });
-        searchButton.setStyle("-fx-background-color: #2d0e0e; -fx-text-fill: white;");
+        searchButton.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-max-width: 100px ;-fx-font-size: 10px;");
+        searchButton.setPrefHeight(11);
+        searchButton.setMaxHeight(11);
 
             // Create the labels and input fields
         Label bookURLLabel = new Label("Book URL:");
@@ -175,12 +192,14 @@ public class adminController extends Application {
         middleContainer.getChildren().addAll(addbox1, addbox2, addbox3, addbox4);
         bottomContainer.getChildren().add(ADD);
 
-        mainContainer.getChildren().addAll(topContainer, middleContainer, descriptionContainer, bottomContainer);
+
+        bookAddedLabel.setStyle("-fx-text-fill: green; -fx-font-size: 16px;");
+
+        mainContainer.getChildren().addAll(topContainer, middleContainer, descriptionContainer, bottomContainer ,bookAddedLabel);
 
 
         addBookButton.setOnAction(e -> {
                 tableViews.getChildren().clear();
-                //Label label = new Label("");
                 tableViews.getChildren().addAll(mainContainer);
             });
 
