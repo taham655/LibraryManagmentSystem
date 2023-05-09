@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -35,52 +34,28 @@ public class forgotPass extends Application {
         usernameTextField.setMaxWidth(350);
         usernameTextField.setPromptText("Enter your username"); // add prompt text
 
-        Label passwordLabel = new Label("Password");
-        passwordLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: Poppins; -fx-text-fill: #000000;");
-        PasswordField passwordField = new PasswordField();
-        passwordField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
-        passwordField.setPrefHeight(30);
-        passwordField.setMaxWidth(350);
-        passwordField.setPromptText("Enter your password"); // add prompt text
-
-        Label confirmPasswordLabel = new Label("Confirm Password");
-        confirmPasswordLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: Poppins; -fx-text-fill: #000000;");
-        PasswordField confirmPasswordField = new PasswordField();
-        confirmPasswordField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
-        confirmPasswordField.setPrefHeight(30);
-        confirmPasswordField.setMaxWidth(350);
-        confirmPasswordField.setPromptText("Confirm your password"); // add prompt text
-
-
-
-        VBox vbox = new VBox(8);
-        vbox.getChildren().addAll(titleLabel, usernameLabel, usernameTextField, passwordLabel, passwordField, confirmPasswordLabel, confirmPasswordField, errorLabel);
-
-        //HBox hbox = new HBox(10);
-
-        //hbox.getChildren().addAll(vbox1, vbox2);
-        vbox.setAlignment(Pos.CENTER_LEFT);
-
         Button submitButton = new Button("Submit");
         submitButton.setMinWidth(200);
         submitButton.setMaxHeight(40);
-
-
 
         submitButton.setOnAction(e ->{
             if(!JDBC.checkUser(usernameTextField.getText())){
                 errorLabel.setTextFill(Color.RED);
                 errorLabel.setText("User does not exist");
-            } else if (passwordField.getText().equals(confirmPasswordField.getText())){
-                JDBC.forgotPassword(usernameTextField.getText(), passwordField.getText());
-                errorLabel.setTextFill(Color.GREEN);
-                errorLabel.setText("Password updated successfully");
 
             } else {
-                errorLabel.setTextFill(Color.RED);
-                errorLabel.setText("Passwords do not match");
+//                String email = JDBC.getEmail(usernameTextField.getText());
+                changePass.setStage(usernameTextField.getText());
+                primaryStage.close();
             }
         });
+
+
+
+        VBox vbox = new VBox(8);
+        vbox.getChildren().addAll(titleLabel, usernameLabel, usernameTextField,errorLabel);
+
+        vbox.setAlignment(Pos.CENTER_LEFT);
 
         Button nvm = new Button("Go Back");
         //aldMemberButton.setDefaultButton(true);

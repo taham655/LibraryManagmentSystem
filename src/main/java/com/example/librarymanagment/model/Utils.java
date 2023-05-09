@@ -54,8 +54,10 @@ public class Utils {
 
                                     // Create ImageView with size and add title
                                     ImageView imageView = new ImageView(image);
-                                    imageView.setFitWidth(140);
-                                    imageView.setFitHeight(220);
+                                    //140
+                                    //220
+                                    imageView.setFitWidth(200);
+                                    imageView.setFitHeight(300);
                                     Label titleLabel = new Label(book.getBookTitle());
                                     titleLabel.setAlignment(Pos.CENTER);
 
@@ -106,11 +108,3 @@ public class Utils {
 
 
 }
-
-//else if(JDBC.getbalance(user_id) > 0){
-//                    Alert alert = new Alert(Alert.AlertType.ERROR);
-//                    alert.setTitle("Error");
-//                    alert.setHeaderText("BALANCE DUE");
-//                    alert.setContentText("Please pay the balance to borrow another book");
-//                    alert.showAndWait();
-

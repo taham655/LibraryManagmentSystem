@@ -124,6 +124,7 @@ public class login extends Application {
                     login.setUserName(usernameTextField.getText());
                     bookInfoController.getUserInfo(id, usernameTextField.getText());
                     UserProfile.userID = id;
+
                     Controller home = new Controller();
                     try {
                         home.start(new Stage());
@@ -174,22 +175,22 @@ public class login extends Application {
         borderPane.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 255), CornerRadii.EMPTY, Insets.EMPTY)));
 
 
-//        Image image = new Image("/images/bg22.png");
-//
-//        // Create the background image
-//        BackgroundImage backgroundImage = new BackgroundImage(
-//                image,
-//                BackgroundRepeat.NO_REPEAT,
-//                BackgroundRepeat.NO_REPEAT,
-//                BackgroundPosition.DEFAULT,
-//                BackgroundSize.DEFAULT
-//        );
-//
-//        // Create the background
-//        Background background = new Background(backgroundImage);
-//
-//        // Set the background to the root layout
-//        borderPane.setBackground(background);
+        Image image = new Image("/images/bg22.png");
+
+        // Create the background image
+        BackgroundImage backgroundImage = new BackgroundImage(
+                image,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT
+        );
+
+        // Create the background
+        Background background = new Background(backgroundImage);
+
+        // Set the background to the root layout
+        borderPane.setBackground(background);
 
 
         // Create a Scene and show the Stage

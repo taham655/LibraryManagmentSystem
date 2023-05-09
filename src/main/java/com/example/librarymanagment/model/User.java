@@ -5,19 +5,19 @@ public class User {
     private String name;
     private String username;
     private String password;
-    private String phone;
+    private String email;
 
     private Double outstanding_fines;
 
     //private String address;
     //private ArrayList<Book> borrowbooks = new ArrayList<Book>();
 
-    public User(int user_id, String name, String username, String password, String phone) {
+    public User(int user_id, String name, String username, String password, String email) {
         setUser_id(user_id);
         setName(name);
         setUsername(username);
         setPassword(password);
-        setPhone(phone);
+        setEmail(email);
     }
 
     public User(int id, String user, String pass) {
@@ -36,12 +36,12 @@ public class User {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {

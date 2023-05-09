@@ -1,5 +1,6 @@
 package com.example.librarymanagment.controls;
 
+import com.example.librarymanagment.model.EMAIL;
 import com.example.librarymanagment.model.JDBC;
 import com.example.librarymanagment.model.User;
 import javafx.application.Application;
@@ -54,10 +55,10 @@ public class signup extends Application {
 
 
                 TextField phoneTextField = new TextField();
-                Label phoneLabel = new Label("Phone:");
+                Label phoneLabel = new Label("Email:");
                 phoneTextField.setStyle("-fx-background-color: #ffffff; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #000000; -fx-border-color: #000000; -fx-border-width: 1px; -fx-font-family: 'Roboto Light'; -fx-border-radius: 2px; -fx-border-insets: 1px; -fx-min-height: 50px;");
 
-                phoneTextField.setPromptText("Enter your phone number");
+                phoneTextField.setPromptText("Enter your email address");
 
 
                 PasswordField passwordField = new PasswordField();
@@ -103,12 +104,6 @@ public class signup extends Application {
                         } else if(JDBC.checkUser(usernameTextField.getText())){
                                 errorLabel.setText("Username already exists");
                                 errorLabel.setTextFill(Color.RED);
-                        } else if (phoneTextField.getText().length() >= 15 || phoneTextField.getText().length() <= 9) {
-                                errorLabel.setText("Phone number invalid length");
-                                errorLabel.setTextFill(Color.RED);
-                        } else if (!phoneTextField.getText().matches("[0-9]+")) {
-                                errorLabel.setText("Phone number should be numeric");
-                                errorLabel.setTextFill(Color.RED);
                         } else if (JDBC.checkUser(usernameTextField.getText())){
                                 errorLabel.setText("Username already exists");
                                 errorLabel.setTextFill(Color.RED);
@@ -116,8 +111,10 @@ public class signup extends Application {
                         else {
                                 JDBC.signUp(usernameTextField.getText(), passwordField.getText(), confirmPasswordField.getText(), nameTextField.getText(), phoneTextField.getText());
                                 login login = new login();
+                                EMAIL.email(phoneTextField.getText(), "Welcome to the Library", "Welcome to the Library, " + nameTextField.getText() + ". Your username is " + usernameTextField.getText() + " and your password is " + passwordField.getText());
                                 login.start(primaryStage);
                         }
+
                 });
 
 

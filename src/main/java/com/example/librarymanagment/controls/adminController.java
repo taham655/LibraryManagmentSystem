@@ -109,7 +109,11 @@ public class adminController extends Application {
                     } else if(Double.parseDouble(rating.getText())  > 5 || (Double.parseDouble(rating.getText()) < 0) || !rating.getText().matches("[0-9]+(\\.[0-9]+)?")){
                         bookAddedLabel.setTextFill(Color.RED);
                         bookAddedLabel.setText("Please enter a valid rating!");
-                    } else {
+                    } else if(!bookURL.getText().matches("^(http|https)://.*$")) {
+                        bookAddedLabel.setTextFill(Color.RED);
+                        bookAddedLabel.setText("Please enter a valid URL!");
+                    }
+                    else {
                         JDBC.addBook(bookName.getText(),author.getText(),genre.getText(),description.getText(), Double.parseDouble(rating.getText()),"yes", bookURL.getText());
                         bookAddedLabel.setTextFill(Color.GREEN);
                         bookAddedLabel.setText("Book Added Successfully!");
@@ -529,10 +533,10 @@ public class adminController extends Application {
         username.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         TableColumn<User, String> password = new TableColumn<>("Password");
         password.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPassword()));
-        TableColumn<User, String> phone = new TableColumn<>("Phone");
-        phone.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone()));
+        TableColumn<User, String> email = new TableColumn<>("Email");
+        email.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
 
-        usersTable.getColumns().addAll(userID, name, username, password, phone);
+        usersTable.getColumns().addAll(userID, name, username, password, email);
 
 
         usersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);

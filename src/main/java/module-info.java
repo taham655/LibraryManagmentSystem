@@ -10,6 +10,7 @@ module com.example.librarymanagment {
     //requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires mysql.connector.j;
+    requires java.mail;
 
 
 //    opens com.example.librarymanagment to javafx.fxml;

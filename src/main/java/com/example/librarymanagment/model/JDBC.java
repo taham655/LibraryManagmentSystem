@@ -113,7 +113,7 @@ public class JDBC {
             throw new IllegalArgumentException("Password and confirm password do not match.");
         }
 
-        String insertQuery = "INSERT INTO users (username, password, name, phone) VALUES (?, ?, ?,?)";
+        String insertQuery = "INSERT INTO users (username, password, name, email) VALUES (?, ?, ?,?)";
 
         try {
             Connection connection = getConnection();
@@ -416,9 +416,9 @@ public class JDBC {
                 int id = resultSet.getInt("id");
                 String username = resultSet.getString("username");
                 String password = resultSet.getString("password");
-                String phone = resultSet.getString("phone");
+                String email = resultSet.getString("email");
                 String name = resultSet.getString("name");
-                users.add(new User(id,name, username, password, phone));
+                users.add(new User(id,name, username, password, email));
             }
 
             resultSet.close();
@@ -541,6 +541,42 @@ public class JDBC {
             Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(updateQuery);
             statement.setInt(1, userID);
+            statement.executeUpdate();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getEmail(String username){
+        String selectQuery = "SELECT email FROM users WHERE username = ?";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(selectQuery);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            String email = null;
+            while (resultSet.next()) {
+                email = resultSet.getString("email");
+                System.out.println(email);
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return email;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateUserPassword(String username, String password){
+        String updateQuery = "UPDATE users SET password = ? WHERE username = ?";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(updateQuery);
+            statement.setString(1, password);
+            statement.setString(2, username);
             statement.executeUpdate();
             statement.close();
             connection.close();

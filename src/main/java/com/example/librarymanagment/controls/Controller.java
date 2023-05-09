@@ -25,6 +25,8 @@ public class Controller extends Application{
                 BorderPane borderPane = new BorderPane();
 
 
+
+
                 Image profileImage = new Image("/images/avatar1.png");
                 ImageView profileImageView = new ImageView(profileImage);
                 profileImageView.setFitHeight(20);
@@ -142,6 +144,8 @@ public class Controller extends Application{
                 scene.getStylesheets().add(getClass().getResource("/CSS/home.css").toExternalForm());
                 primaryStage.setScene(scene);
                 primaryStage.show();
+
+                //EMAIL.email("taham655@gmail.com","Login alert", "THIS IS AN AUTOMATED MESSAGE FROM THE KUTAB KHANA LIBRARY!!");
 
                 logOut.setOnAction(e ->{
                         login login = new login();
