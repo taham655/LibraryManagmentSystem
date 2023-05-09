@@ -266,33 +266,6 @@ public class JDBC {
         }
     }
 
-//    public static ArrayList<Integer> getBorrowedUser(int user_id){
-//        String selectQuery = "SELECT book_id FROM `borrow` WHERE user_id = ?";
-//
-//
-//        try {
-//            Connection connection = getConnection();
-//            PreparedStatement statement = connection.prepareStatement(selectQuery);
-//            statement.setInt(1, user_id);
-//            ResultSet resultSet = statement.executeQuery();
-//            resultSet.next();
-//            ArrayList<Integer> requiredBook = new ArrayList<>();
-//            while (resultSet.next()) {
-//                int bookId = resultSet.getInt("book_id");
-//                requiredBook.add(bookId);
-//            }
-//
-//            resultSet.close();
-//            statement.close();
-//            connection.close();
-//
-//            return requiredBook;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     public static void addBook(String title, String authors, String categories, String description, double average_rating, String available, String thumbnail) {
         //available = "yes";
         String insertQuery = "INSERT INTO books (title, authors, categories, description, average_rating, available, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?)";
