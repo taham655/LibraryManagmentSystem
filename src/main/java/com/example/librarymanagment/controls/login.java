@@ -83,6 +83,11 @@ public class login extends Application {
         forgotPasswordButton.setOnAction(e -> {
             forgotPass forgotPassword = new forgotPass();
             try {
+                if(selectedValue[0].equals("Admin")){
+                    forgotPass.adminOrUser(false);
+                } else {
+                    forgotPass.adminOrUser(true);
+                }
                 forgotPassword.start(new Stage());
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
@@ -197,6 +202,7 @@ public class login extends Application {
         Scene scene = new Scene(borderPane, 1315, 890);
         scene.getStylesheets().add(getClass().getResource("/CSS/login.css").toExternalForm());
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

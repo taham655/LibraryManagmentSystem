@@ -28,9 +28,7 @@ public class Reviews {
         this.rating = rating;
     }
 
-    public void setReview_id(int review_id) {
-        this.review_id = review_id;
-    }
+
 
     public void setBook_id(int book_id) {
         this.book_id = book_id;
@@ -44,19 +42,10 @@ public class Reviews {
         this.user_id = user_id;
     }
 
-    public int getReview_id() {
-        return review_id;
-    }
-
-    public int getBook_id() {
-        return book_id;
-    }
 
     public String getReview() {
         return review;
     }
 
-    public int getUser_id() {
-        return user_id;
-    }
+
 }

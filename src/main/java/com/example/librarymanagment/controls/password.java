@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 public class password extends Application {
     static String user = "";
+    static boolean isUser;
     @Override
     public void start(Stage stage) throws Exception {
         BorderPane borderPane = new BorderPane();
@@ -54,7 +55,12 @@ public class password extends Application {
 
         submitButton.setOnAction(e ->{
             if(passwordField.getText().equals(confirmPasswordField.getText())){
-                JDBC.updateUserPassword(user, passwordField.getText());
+                if (isUser){
+                    JDBC.updateUserPassword(user, passwordField.getText());
+                } else {
+                    JDBC.updateAdminPassword(user, passwordField.getText());
+                }
+
                 login login = new login();
                 try {
                     login.start(stage);
@@ -103,8 +109,12 @@ public class password extends Application {
         Scene scene = new Scene(borderPane, 1315, 890);
         scene.getStylesheets().add(getClass().getResource("/CSS/signup.css").toExternalForm());
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
 
+    }
+    public static void adminUser(boolean isUsers){
+        isUser = isUsers;
     }
 
 

@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -54,10 +55,9 @@ public class Utils {
 
                                     // Create ImageView with size and add title
                                     ImageView imageView = new ImageView(image);
-                                    //140
-                                    //220
+
                                     imageView.setFitWidth(200);
-                                    imageView.setFitHeight(300);
+                                    imageView.setFitHeight(310);
                                     Label titleLabel = new Label(book.getBookTitle());
                                     titleLabel.setAlignment(Pos.CENTER);
 
@@ -104,6 +104,11 @@ public class Utils {
             }
 
             return root;
+    }
+
+    public static boolean isValidEmailAddress(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return Pattern.matches(regex, email);
     }
 
 

@@ -286,6 +286,7 @@ public class UserProfile extends Application {
             // Set the scene and show the stage
             primaryStage.setScene(scene);
             primaryStage.setTitle("User Profile");
+            primaryStage.setResizable(false);
             primaryStage.show();
         }
     }

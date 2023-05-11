@@ -3,14 +3,12 @@ package com.example.librarymanagment.controls;
 import com.example.librarymanagment.model.EMAIL;
 import com.example.librarymanagment.model.JDBC;
 import com.example.librarymanagment.model.User;
+import com.example.librarymanagment.model.Utils;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -91,8 +89,6 @@ public class signup extends Application {
                 buttonBox.setAlignment(Pos.CENTER);
                 buttonBox.getChildren().add(signUpButton);
 
-
-
                 // Set action for the sign-up button
                 signUpButton.setOnAction(e -> {
                         if (usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty() || nameTextField.getText().isEmpty() || phoneTextField.getText().isEmpty()) {
@@ -104,15 +100,31 @@ public class signup extends Application {
                         } else if(JDBC.checkUser(usernameTextField.getText())){
                                 errorLabel.setText("Username already exists");
                                 errorLabel.setTextFill(Color.RED);
-                        } else if (JDBC.checkUser(usernameTextField.getText())){
-                                errorLabel.setText("Username already exists");
+
+                        } else if(JDBC.checkUserEmail(phoneTextField.getText())){
+                                errorLabel.setText("Email already exists");
                                 errorLabel.setTextFill(Color.RED);
-                        }
-                        else {
-                                JDBC.signUp(usernameTextField.getText(), passwordField.getText(), confirmPasswordField.getText(), nameTextField.getText(), phoneTextField.getText());
-                                login login = new login();
-                                EMAIL.email(phoneTextField.getText(), "Welcome to the Library", "Welcome to the Library, " + nameTextField.getText() + ". Your username is " + usernameTextField.getText() + " and your password is " + passwordField.getText());
-                                login.start(primaryStage);
+                        } else if (!Utils.isValidEmailAddress(phoneTextField.getText())) {
+                                errorLabel.setText("Invalid Email");
+                                errorLabel.setTextFill(Color.RED);
+                        } else {
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setTitle("Confirmation Dialog");
+                                alert.setHeaderText("Are you sure you want to sign up?");
+                                alert.setContentText("Click OK to continue");
+                                if (alert.showAndWait().get() == ButtonType.OK){
+                                        JDBC.signUp(usernameTextField.getText(), passwordField.getText(), confirmPasswordField.getText(), nameTextField.getText(), phoneTextField.getText());
+                                        login login = new login();
+                                        EMAIL.email(phoneTextField.getText(), "Welcome to the Kutab Khana", "Welcome to the Kutab Khana Library, " + nameTextField.getText() +"\n"+  "\nWe would like to extend a warm welcome to you as a new member of our library! \n" +
+                                                "We are thrilled to have you join our community of learners and readers, and we look forward to providing you with an enriching experience.\n\n" +
+                                                "Our library has a wide selection of books, ranging from popular fiction and non-fiction titles to scholarly works and research materials. \n" +
+                                                "We hope that you will take advantage of everything our library has to offer, and we look forward to seeing you soon. \n" +
+                                                "If you have any questions or need any assistance, please do not hesitate to contact us.\n\n" +
+                                                "Thank you for choosing our library as your go-to place for knowledge and entertainment. \n" +
+                                                "We can't wait to get to know you better and to help you achieve your goals.\n\n" + "Regards,\n" + "Kutab Khana Team");
+                                        login.start(primaryStage);
+                                }
+
                         }
 
                 });
@@ -147,8 +159,14 @@ public class signup extends Application {
 
                 // Show the scene
                 primaryStage.setScene(scene);
+                primaryStage.setResizable(false);
                 primaryStage.show();
         }
+
+
+
+
+
 
 
 

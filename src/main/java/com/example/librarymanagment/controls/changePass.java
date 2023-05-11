@@ -16,26 +16,33 @@ import javafx.stage.Stage;
 import java.util.Random;
 
 public class changePass extends Application {
+    static boolean isUser;
 
     public static void setStage(String username){
 
         Stage stage = new Stage();
-        System.out.println(username);
 
         Random random = new Random();
 
         int randomNumber = random.nextInt(9000) + 1000;
 
         BorderPane borderPane = new BorderPane();
+        System.out.println(isUser);
+        String emails;
 
-        String emails = JDBC.getEmail(username);
-        System.out.println(emails);
-        //System.out.println(email);
+        if (isUser){
+             emails = JDBC.getUserEmail(username);
+            System.out.println(emails);
+             password.adminUser(true);
+        } else {
+             emails = JDBC.getAdminEmail(username);
+            System.out.println(emails);
+             password.adminUser(false);
+        }
 
         //System.out.println(EMAIL.email);
-        EMAIL.email(emails, "Change Password", "Your code is: " + randomNumber);
+        EMAIL.email(emails, "Password Recovery", "Your code is: " +  randomNumber + "\n\nIf you did not request this change, please ignore this email.");
 
-        System.out.println("This is clear");
 
         Label titleLabel = new Label("Account Recovery");
         titleLabel.setStyle("-fx-font-size: 50px; -fx-font-weight: bold; -fx-font-family: Poppins Light; -fx-text-fill: #000000;");
@@ -81,20 +88,37 @@ public class changePass extends Application {
 
         });
 
+        Button gobackButton = new Button("Cancel");
+        gobackButton.setStyle("-fx-background-color: TRANSPARENT; -fx-text-fill: #000000; -fx-pref-width: 150; -fx-font-style: italic; -fx-underline: true; -fx-border-color: TRANSPARENT;");
+        gobackButton.setMaxHeight(20);
+        gobackButton.setOnAction(e ->{
+            login login = new login();
+            try {
+                login.start(stage);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
         VBox vBox = new VBox();
         vBox.setSpacing(20);
         vBox.setPadding(new javafx.geometry.Insets(50));
         vBox.setAlignment(Pos.CENTER);
 
-        vBox.getChildren().addAll(titleLabel,explain, codeBox, submitButton , errorLabel);
+        vBox.getChildren().addAll(titleLabel,explain, codeBox, submitButton , gobackButton, errorLabel);
 
         borderPane.setCenter(vBox);
 
         Scene scene = new Scene(borderPane, 1315, 890);
         scene.getStylesheets().add(changePass.class.getResource("/CSS/signup.css").toExternalForm());
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
 
+    }
+
+    public static void adminUser(boolean isUsers){
+        isUser = isUsers;
     }
     @Override
     public void start(Stage stage) throws Exception {

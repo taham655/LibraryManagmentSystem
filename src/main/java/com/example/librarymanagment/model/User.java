@@ -68,11 +68,5 @@ public class User {
         this.password = password;
     }
 
-    public Double getOutstanding_fines() {
-        return outstanding_fines;
-    }
 
-    public void setOutstanding_fines(Double outstanding_fines) {
-        this.outstanding_fines = outstanding_fines;
-    }
 }

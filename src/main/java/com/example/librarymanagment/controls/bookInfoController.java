@@ -140,10 +140,19 @@ public class bookInfoController extends Application {
                     alert.setContentText("Please pay the balance to borrow another book");
                     alert.showAndWait();
                 }else {
-                    borrowBook(book_id, user_id, currentDate, d.getValue());
-                    availableLabel.setText("Available : no");
-                    availableLabel.setStyle("-fx-text-fill: red; -fx-font-size: 13px;-fx-font-weight: bold;-fx-font-family: 'Arial Narrow';");
-                    submitButton.setDisable(true);
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Borrow");
+                    alert.setHeaderText("Confirmation");
+                    alert.setContentText("Are you sure you want to borrow this book?");
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.OK) {
+                        borrowBook(book_id, user_id, currentDate, d.getValue());
+                        availableLabel.setText("Available : no");
+                        availableLabel.setStyle("-fx-text-fill: red; -fx-font-size: 13px;-fx-font-weight: bold;-fx-font-family: 'Arial Narrow';");
+                        submitButton.setDisable(true);
+                    } else {
+                        alert.close();
+                    }
                 }
 
 
@@ -289,6 +298,7 @@ public class bookInfoController extends Application {
 
         scene.getStylesheets().add(getClass().getResource("/CSS/bookInfo.css").toExternalForm());
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
 
     }

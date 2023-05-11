@@ -19,7 +19,6 @@ public class JDBC {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:8080/library", "root", "");
-            //System.out.println("Connceted to database");
 
             return connection;
 
@@ -48,6 +47,30 @@ public class JDBC {
 
 
         return books;
+    }
+
+
+    public static void updateBook(int bookId, String title, String authors, String categories, Double rating, String description) {
+        String updateQuery = "UPDATE Books SET title = ?, authors = ?, categories = ?, description = ?,average_rating = ? WHERE book_id = ?";
+
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(updateQuery);
+            statement.setString(1, title);
+            statement.setString(2, authors);
+            statement.setString(3, categories);
+            statement.setString(4, description);
+            statement.setDouble(5,  rating);
+            statement.setInt(6, bookId);
+
+            statement.executeUpdate();
+
+            statement.close();
+            connection.close();
+            System.out.println("Book updated");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //FOR REVIEWS
@@ -145,23 +168,6 @@ public class JDBC {
                     return -1; // login failed
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void forgotPassword(String username, String password){
-        String updateQuery = "UPDATE users SET password = ? WHERE username = ?";
-
-        try {
-            Connection connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(updateQuery);
-            statement.setString(1, password);
-            statement.setString(2, username);
-            statement.executeUpdate();
-
-            statement.close();
-            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -420,14 +426,14 @@ public class JDBC {
         }
     }
 
-    public static void createAdmin (String name, String username, String password, String phone){
-        String insertQuery = "INSERT INTO admin (username, password, phone) VALUES (?, ?, ?)";
+    public static void createAdmin (String name, String username, String password, String email){
+        String insertQuery = "INSERT INTO admin (username, password, email) VALUES (?, ?, ?)";
         try {
             Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(insertQuery);
             statement.setString(1, username);
             statement.setString(2, password);
-            statement.setString(3, phone);
+            statement.setString(3, email);
             statement.executeUpdate();
             statement.close();
             connection.close();
@@ -475,6 +481,25 @@ public class JDBC {
         }
     }
 
+    public static boolean checkAdmin(String username){
+        String selectQuery = "SELECT * FROM admin WHERE username = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+            statement.setString(1, username);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return true;
+                } else {
+                    return false; // login failed
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public static Double getbalance (int userID){
         String selectQuery = "SELECT outstanding_balance FROM users WHERE id = ?";
 
@@ -508,22 +533,29 @@ public class JDBC {
         }
     }
 
-    public static void payBalance(int userID) {
-        String updateQuery = "UPDATE users SET outstanding_balance = 0 WHERE id = ?";
+    public static String getUserEmail(String username){
+        String selectQuery = "SELECT email FROM users WHERE username = ?";
         try {
             Connection connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(updateQuery);
-            statement.setInt(1, userID);
-            statement.executeUpdate();
+            PreparedStatement statement = connection.prepareStatement(selectQuery);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            String email = null;
+            while (resultSet.next()) {
+                email = resultSet.getString("email");
+                System.out.println(email);
+            }
+            resultSet.close();
             statement.close();
             connection.close();
+            return email;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static String getEmail(String username){
-        String selectQuery = "SELECT email FROM users WHERE username = ?";
+    public static String getAdminEmail(String username){
+        String selectQuery = "SELECT email FROM admin WHERE username = ?";
         try {
             Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(selectQuery);
@@ -553,6 +585,39 @@ public class JDBC {
             statement.executeUpdate();
             statement.close();
             connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateAdminPassword(String username, String password){
+        String updateQuery = "UPDATE admin SET password = ? WHERE username = ?";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(updateQuery);
+            statement.setString(1, password);
+            statement.setString(2, username);
+            statement.executeUpdate();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean checkUserEmail(String email){
+        String selectQuery = "SELECT * FROM users WHERE email = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectQuery)) {
+            statement.setString(1, email);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return true;
+                } else {
+                    return false; // login failed
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

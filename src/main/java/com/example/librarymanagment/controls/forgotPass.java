@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class forgotPass extends Application {
+    static boolean isUser;
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Forgot Password");
@@ -39,14 +40,33 @@ public class forgotPass extends Application {
         submitButton.setMaxHeight(40);
 
         submitButton.setOnAction(e ->{
-            if(!JDBC.checkUser(usernameTextField.getText())){
+            if (usernameTextField.getText().isEmpty()) {
                 errorLabel.setTextFill(Color.RED);
-                errorLabel.setText("User does not exist");
-
+                errorLabel.setText("Please enter a username");
             } else {
-//                String email = JDBC.getEmail(usernameTextField.getText());
-                changePass.setStage(usernameTextField.getText());
-                primaryStage.close();
+
+                if(isUser){
+
+                if (!JDBC.checkUser(usernameTextField.getText())) {
+                    errorLabel.setTextFill(Color.RED);
+                    errorLabel.setText("User does not exist");
+
+                } else {
+                    changePass.adminUser(true);
+                    changePass.setStage(usernameTextField.getText());
+                    primaryStage.close();
+                }
+            } else {
+                    if (!JDBC.checkAdmin(usernameTextField.getText())) {
+                        errorLabel.setTextFill(Color.RED);
+                        errorLabel.setText("Admin does not exist");
+
+                    } else {
+                        changePass.adminUser(false);
+                        changePass.setStage(usernameTextField.getText());
+                        primaryStage.close();
+                    }
+                }
             }
         });
 
@@ -87,8 +107,13 @@ public class forgotPass extends Application {
         Scene scene = new Scene(borderPane, 1315, 890);
         scene.getStylesheets().add(getClass().getResource("/CSS/signup.css").toExternalForm());
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
 
 
+    }
+
+    public static void adminOrUser(boolean isUsers){
+        isUser = isUsers;
     }
 }

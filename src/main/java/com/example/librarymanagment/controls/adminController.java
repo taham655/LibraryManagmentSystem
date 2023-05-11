@@ -1,9 +1,6 @@
 package com.example.librarymanagment.controls;
 
-import com.example.librarymanagment.model.Book;
-import com.example.librarymanagment.model.JDBC;
-import com.example.librarymanagment.model.User;
-import com.example.librarymanagment.model.borrow;
+import com.example.librarymanagment.model.*;
 import javafx.application.Application;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -42,7 +39,7 @@ public class adminController extends Application {
             adminAvatar.setFitHeight(100);
 
             // Create a Label for admin name
-            Label adminNameLabel = new Label("Imap Ussay");
+            Label adminNameLabel = new Label("Admin View");
             adminNameLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
 
             // Create a VBox to hold the admin avatar and name
@@ -51,7 +48,7 @@ public class adminController extends Application {
 
             // Create navigation buttons
             Button addBookButton = new Button("Add Book");
-            Button removeBookButton = new Button("Remove Book");
+            Button removeBookButton = new Button("Update Book");
             Button borrowedBooksButton = new Button("Borrowed Books");
             Button usersButton = new Button("Users");
             Button CreateAdminButton = new Button("Create Admin");
@@ -85,7 +82,6 @@ public class adminController extends Application {
 
 
             // Create the TableView for adding books
-            Book book = new Book();
             TextField bookURL = new TextField();
             bookURL.setPrefWidth(300);
             TextField bookName = new TextField();
@@ -117,6 +113,15 @@ public class adminController extends Application {
                         JDBC.addBook(bookName.getText(),author.getText(),genre.getText(),description.getText(), Double.parseDouble(rating.getText()),"yes", bookURL.getText());
                         bookAddedLabel.setTextFill(Color.GREEN);
                         bookAddedLabel.setText("Book Added Successfully!");
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Book Added");
+                        alert.setHeaderText("Book Added Successfully!");
+                        alert.showAndWait();
+                        try {
+                            start(primaryStage);
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
 
                     }
                    // JDBC.addBook(bookName.getText(),author.getText(),genre.getText(),description.getText(), Double.parseDouble(rating.getText()),"yes", bookURL.getText());
@@ -205,19 +210,14 @@ public class adminController extends Application {
         addBookButton.setOnAction(e -> {
                 tableViews.getChildren().clear();
                 tableViews.getChildren().addAll(mainContainer);
-            });
-
-
-
-
+        });
             //// Adding book ends here \\\\\
-
 
         ///REMOVE BOOK\\\
 
         ImageView bookImageViewRemove = new ImageView();
-        bookImageViewRemove.setFitHeight(250);
-        bookImageViewRemove.setFitWidth(170);
+        bookImageViewRemove.setFitHeight(300);
+        bookImageViewRemove.setFitWidth(190);
 
         // Create the book title label
         Label titleLabel = new Label();
@@ -246,15 +246,36 @@ public class adminController extends Application {
         ImageView finalBookImageViewRemove = bookImageViewRemove;
         final int[] selectedBookID = new int[1];
         Label removeBookLabel = new Label();
+
+        TextField title1 = new TextField();
+        title1.setText("Title");
+        TextField author1 = new TextField();
+        author1.setText("Author");
+        TextField genre1 = new TextField();
+        genre1.setText("Genre");
+        TextField rating1 = new TextField();
+        rating1.setText("Rating");
+        TextArea description1 = new TextArea();
+        description1.setText("Description");
+
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
+
                 removeBookLabel.setText("");
                 Book selectedBook = (Book) tableView.getSelectionModel().getSelectedItem();
                 finalBookImageViewRemove.setImage(new Image(selectedBook.getThumbnail()));
+                title1.setText(selectedBook.getBookTitle());
+                author1.setText(selectedBook.getAuthor());
+                genre1.setText(selectedBook.getCategories());
+                rating1.setText(String.valueOf(selectedBook.getAvg_rating()));
+                description1.setText(selectedBook.getDescription());
                 selectedBookID[0] = selectedBook.getBook_id();
                 titleLabel.setText(selectedBook.getBookTitle());
+
             }
         });
+
+        System.out.println(title1.getText());
 
         tableView.setStyle("-fx-background-color: TRANSPARENT;");
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -275,15 +296,12 @@ public class adminController extends Application {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-
                 String lowerCaseFilter = newValue.toLowerCase();
-
                 if (book1.getBookTitle().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Title matches the search text
+                    return true;
                 } else{
-                    return false; // No match found
+                    return false;
                 }
-                // No match found
             });
         });
         searchBookTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -300,13 +318,15 @@ public class adminController extends Application {
         mainLayout.setPadding(new Insets(40));
         mainLayout.setAlignment(Pos.CENTER);
 
-        // Create the book details layout
-        VBox bookDetailsLayout = new VBox();
-        bookDetailsLayout.setSpacing(20);
-        bookDetailsLayout.setAlignment(Pos.CENTER);
-        bookDetailsLayout.getChildren().addAll(bookImageViewRemove, titleLabel);
 
         Button removeBook = new Button("Remove Book");
+        Button updateBook = new Button("Update Book");
+        HBox remove_update = new HBox(removeBook, updateBook);
+        remove_update.setSpacing(10);
+
+
+
+        //System.out.println(selectedBook.getBook_id());
 
         removeBookLabel.setStyle("-fx-text-fill: green;");
         removeBook.setOnAction(e -> {
@@ -317,128 +337,30 @@ public class adminController extends Application {
             System.out.println("Book Removed");
                 });
 
-        mainLayout.getChildren().addAll(searchBookTextField, bookDetailsLayout, tableView, removeBook, removeBookLabel);
+        VBox updateBookLayout = new VBox();
+        updateBookLayout.setSpacing(20);
+        updateBookLayout.getChildren().addAll(title1, author1, genre1, rating1, description1);
+
+        HBox total_detail = new HBox(bookImageViewRemove, updateBookLayout);
+        total_detail.setSpacing(300);
+
+        updateBook.setOnAction(e -> {
+                Book selectedBook = (Book) tableView.getSelectionModel().getSelectedItem();
+                selectedBook.setBookTitle(title1.getText());
+                selectedBook.setAuthor(author1.getText());
+                selectedBook.setCategories(genre1.getText());
+                selectedBook.setAvg_rating(Double.parseDouble(rating1.getText()));
+                selectedBook.setDescription(description1.getText());
+                JDBC.updateBook(selectedBook.getBook_id(),selectedBook.getBookTitle(),selectedBook.getAuthor(),selectedBook.getCategories(), selectedBook.getAvg_rating(), selectedBook.getDescription());
+                removeBookLabel.setText("Book Updated");
+                });
+
+        mainLayout.getChildren().addAll(searchBookTextField, total_detail, tableView, remove_update, removeBookLabel);
 
         removeBookButton.setOnAction(e -> {
                 tableViews.getChildren().clear();
                 tableViews.getChildren().add(mainLayout);
             });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        TextField SearchBookToRemove = new TextField();
-//        ObservableList<Book> books = FXCollections.observableArrayList();
-//        books.addAll(JDBC.getBooksData());
-//
-//
-//
-//
-//        // Create the book image view
-//        ImageView bookImageViewRemove = new ImageView();
-//        bookImageViewRemove = new ImageView();
-//        bookImageViewRemove.setFitHeight(250);
-//        bookImageViewRemove.setFitWidth(170);
-//
-//        // Create the book title label
-//        Label titleLabel = new Label();
-//
-//        // Create the table view
-//        TableView tableView = new TableView<>();
-//        tableView.setItems(books);
-//
-//        TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
-//        titleColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBookTitle()));
-//
-//        TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
-//        authorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAuthor()));
-//
-//        TableColumn<Book, String> genreColumn = new TableColumn<>("Genre");
-//        genreColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCategories()));
-//
-//        TableColumn<Book, String> availColumn = new TableColumn<>("Availibility");
-//        availColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAvailable()));
-//
-//
-//        tableView.getColumns().addAll(titleColumn, authorColumn, genreColumn, availColumn);
-//
-//        // Set the table view selection listener
-//        ImageView finalBookImageViewRemove = bookImageViewRemove;
-//        final int[] selectedBookID = new int[1];
-//        Label removeBookLabel = new Label();
-//        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//            if (newSelection != null) {
-//                removeBookLabel.setText("");
-//                Book selectedBook = (Book) tableView.getSelectionModel().getSelectedItem();
-//                finalBookImageViewRemove.setImage(new Image(selectedBook.getThumbnail()));
-//                selectedBookID[0] = selectedBook.getBook_id();
-//                titleLabel.setText(selectedBook.getBookTitle());
-//            }
-//        });
-//
-//        //tableView.setPrefWidth(600);
-//        tableView.setStyle("-fx-background-color: TRANSPARENT;");
-//        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-//        tableView.setPrefWidth(Region.USE_COMPUTED_SIZE);
-//        tableView.setPrefHeight(Region.USE_COMPUTED_SIZE);
-//        tableView.setPlaceholder(new Label("No books to display"));
-//
-//
-//        // Create the main layout
-//        VBox mainLayout = new VBox();
-//        mainLayout.setSpacing(20);
-//        mainLayout.setPadding(new Insets(40));
-//        mainLayout.setAlignment(Pos.CENTER);
-//
-//        // Create the book details layout
-//        VBox bookDetailsLayout = new VBox();
-//        bookDetailsLayout.setSpacing(20);
-//        bookDetailsLayout.setAlignment(Pos.CENTER);
-//        bookDetailsLayout.getChildren().addAll(bookImageViewRemove, titleLabel);
-//
-//        Button removeBook = new Button("Remove Book");
-//
-//        removeBookLabel.setStyle("-fx-text-fill: green;");
-//        removeBook.setOnAction(e -> {
-//            Book selectedBook = (Book) tableView.getSelectionModel().getSelectedItem();
-//            JDBC.removebook(selectedBook.getBook_id());
-//            tableView.getItems().remove(selectedBook);
-//            removeBookLabel.setText("Book Removed");
-//            System.out.println("Book Removed");
-//                });
-//
-//
-//
-//        mainLayout.getChildren().addAll(bookDetailsLayout, tableView, removeBook, removeBookLabel);
-//
-//
-//
-//
-//
-//            // Set the action for the "Remove Book" button
-//            removeBookButton.setOnAction(e -> {
-//                tableViews.getChildren().clear();
-//                tableViews.getChildren().add(mainLayout);
-//            });
 
 
         ///// REMOVE BOOKS ENDS HERE \\\\\\
@@ -497,12 +419,7 @@ public class adminController extends Application {
 
             });
 
-
-
             //borrowed books end here\\
-
-
-
 
         VBox mainLayoutUser = new VBox();
         mainLayoutUser.setSpacing(20);
@@ -601,11 +518,11 @@ public class adminController extends Application {
             passwordCreateAdminField.setPrefHeight(50);
             passwordCreateAdminField.setPromptText("Enter Password");
 
-            Label phoneCreateAdmin = new Label("Phone");
+            Label phoneCreateAdmin = new Label("Email");
             TextField phoneCreateAdminField = new TextField();
             phoneCreateAdminField.setPrefWidth(300);
             phoneCreateAdminField.setPrefHeight(50);
-            phoneCreateAdminField.setPromptText("Enter Phone");
+            phoneCreateAdminField.setPromptText("Enter Email");
 
             Button createAdminButton = new Button("Create Admin");
             createAdminButton.setStyle("-fx-background-color: #8c1010; -fx-text-fill: #ffffff; -fx-font-size: 15px;");
@@ -616,20 +533,19 @@ public class adminController extends Application {
             creatingMsg.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #36c700;");
 
             createAdminButton.setOnAction(e -> {
+
+                if(nameCreateAdminField.getText().isEmpty() || usernameCreateAdminField.getText().isEmpty() || passwordCreateAdminField.getText().isEmpty() || phoneCreateAdminField.getText().isEmpty()){
+                    creatingMsg.setText("Please fill all the fields");
+                    creatingMsg.setStyle("-fx-text-fill: #c70000;");
+
+                } else if (!Utils.isValidEmailAddress( phoneCreateAdminField.getText())){
+                    creatingMsg.setText("Please enter a valid email");
+                    creatingMsg.setStyle("-fx-text-fill: #c70000;");
+                } else {
                 JDBC.createAdmin(nameCreateAdminField.getText(), usernameCreateAdminField.getText(), passwordCreateAdminField.getText(), phoneCreateAdminField.getText());
                 creatingMsg.setText("Admin Created");
-                Thread thread = new Thread(() -> {
-                    try {
-                        Thread.sleep(2000);
-                        creatingMsg.setText("");
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
+                }
                 });
-
-            });
-
-
 
             mainLayoutCreateAdmin.getChildren().addAll(titleCreateAdmin, nameCreateAdmin, nameCreateAdminField, usernameCreateAdmin, usernameCreateAdminField, passwordCreateAdmin, passwordCreateAdminField, phoneCreateAdmin, phoneCreateAdminField, createAdminButton, creatingMsg);
 
@@ -650,6 +566,7 @@ public class adminController extends Application {
             // Create a Scene and show the Stage
             Scene scene = new Scene(root, 1315, 890);
             scene.getStylesheets().add(getClass().getResource("/CSS/admin.css").toExternalForm());
+            primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.show();
 
